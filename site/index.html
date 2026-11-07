@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediTailor | Hospital Clothing Factory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="#">MediTailor</a>
+      <nav class="nav" id="nav">
+        <a class="nav-link active" href="#home" data-i18n="nav_home">Home</a>
+        <a class="nav-link" href="#products" data-i18n="nav_products">Products</a>
+        <a class="nav-link" href="#about" data-i18n="nav_about">About</a>
+        <a class="nav-link" href="#contact" data-i18n="nav_contact">Contact</a>
+      </nav>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fa">فا</button>
+        <button class="lang-btn" data-lang="ar">ع</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+      <button id="menuToggle" class="btn btn-outline" type="button" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div>
+        <h1 data-i18n="hero_title">Hospital clothing factory</h1>
+        <p data-i18n="hero_subtitle">Scrubs, lab coats, surgical gowns and protective wear for hospitals and clinics.</p>
+        <a class="btn btn-primary" href="#contact" data-i18n="hero_cta">Request a quote</a>
+      </div>
+      <div class="card">
+        <h3 data-i18n="stat_years">15+ years</h3>
+        <p data-i18n="stat_clients">200+ hospital clients</p>
+        <p data-i18n="stat_units">50K+ units / month</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="products_title">Products</h2>
+        <p data-i18n="products_subtitle">Medical garments manufactured to hospital standards</p>
+      </div>
+      <div class="cards">
+        <article class="card"><h3 data-i18n="p1_title">Medical Scrubs</h3><p data-i18n="p1_desc">Comfortable durable scrub sets.</p></article>
+        <article class="card"><h3 data-i18n="p2_title">Lab Coats</h3><p data-i18n="p2_desc">Professional coats with custom logo options.</p></article>
+        <article class="card"><h3 data-i18n="p3_title">Surgical Gowns</h3><p data-i18n="p3_desc">Sterile and reusable surgical gowns.</p></article>
+        <article class="card"><h3 data-i18n="p4_title">Protective Wear</h3><p data-i18n="p4_desc">Isolation gowns and coveralls.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container section-title">
+      <h2 data-i18n="about_title">About the factory</h2>
+      <p data-i18n="about_text">We manufacture hospital clothing for clinics and medical centers with quality control and multi-language support.</p>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="contact_title">Contact</h2>
+        <p data-i18n="contact_subtitle">Send a quote request</p>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <input name="name" required placeholder="Name" data-i18n="form_name">
+        <input name="company" placeholder="Company" data-i18n="form_company">
+        <input name="email" type="email" required placeholder="Email" data-i18n="form_email">
+        <input name="phone" placeholder="Phone" data-i18n="form_phone">
+        <select name="product">
+          <option value="" data-i18n="form_product">Product interest</option>
+          <option value="scrubs">Scrubs</option>
+          <option value="lab_coats">Lab coats</option>
+          <option value="surgical_gowns">Surgical gowns</option>
+          <option value="protective">Protective</option>
+        </select>
+        <textarea name="message" rows="4" required placeholder="Message" data-i18n="form_message"></textarea>
+        <button class="btn btn-primary" type="submit" data-i18n="form_submit">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© MediTailor — Hospital clothing factory</p>
+    </div>
+  </footer>
+
+  <script src="js/translations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
