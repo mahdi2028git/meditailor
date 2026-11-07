@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #0d7377;
+  --primary-dark: #095456;
+  --primary-light: #14919b;
+  --accent: #32e0c4;
+  --bg: #f8fafb;
+  --bg-dark: #0f172a;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --white: #ffffff;
+  --border: #e2e8f0;
+  --shadow: 0 4px 20px rgba(13, 115, 119, 0.08);
+  --radius: 12px;
+  --font: 'Inter', system-ui, sans-serif;
+  --font-fa: 'Vazirmatn', 'Inter', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+body.rtl {
+  font-family: var(--font-fa);
+  direction: rtl;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
