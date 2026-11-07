@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediTailor Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0d7377; --primary-dark: #095456; --bg: #f1f5f9; --card: #fff;
+      --text: #0f172a; --muted: #64748b; --border: #e2e8f0; --danger: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .hidden { display: none !important; }
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .login-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2rem; width: min(400px, 100%); box-shadow: 0 10px 40px rgba(13,115,119,.08);
+    }
+    .login-card h1 { font-size: 1.4rem; color: var(--primary); margin-bottom: .35rem; }
+    .login-card p { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
+    label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: .35rem; }
+    input {
+      width: 100%; padding: .7rem .85rem; border: 1px solid var(--border);
+      border-radius: 10px; font: inherit; margin-bottom: 1rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: .7rem 1.2rem; border: none; border-radius: 10px; font: inherit; font-weight: 600; cursor: pointer;
+    }
+    .btn-primary { background: var(--primary); color: #fff; width: 100%; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .error { background: #fef2f2; color: var(--danger); padding: .65rem .8rem; border-radius: 8px; font-size: .85rem; margin-bottom: 1rem; }
+    .topbar {
+      background: var(--card); border-bottom: 1px solid var(--border); padding: .85rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; position: sticky; top: 0; z-index: 10;
+    }
+    .topbar h1 { font-size: 1.1rem; color: var(--primary); }
+    .topbar-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .layout { width: min(1100px, 94%); margin: 1.5rem auto 3rem; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; }
+    .stat .label { color: var(--muted); font-size: .8rem; }
+    .stat .value { font-size: 1.6rem; font-weight: 700; margin-top: .25rem; color: var(--primary); }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-head { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { text-align: left; padding: .75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f8fafc; color: var(--muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; }
+    .badge { display: inline-block; padding: .15rem .5rem; border-radius: 999px; background: #e0f2f1; color: var(--primary-dark); font-size: .75rem; font-weight: 600; }
+    .msg { max-width: 280px; color: var(--muted); white-space: pre-wrap; }
+    .empty { padding: 2.5rem 1rem; text-align: center; color: var(--muted); }
+    .api-hint { font-size: .8rem; color: var(--muted); margin-top: 1rem; }
+    .api-hint code { background: #e2e8f0; padding: .1rem .35rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div id="login-screen">
+    <div class="login-card">
+      <h1>MediTailor Admin</h1>
+      <p>Sign in to view quote requests and stats.</p>
+      <div id="login-error" class="error hidden"></div>
+      <form id="login-form">
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" required placeholder="Admin password">
+        <label for="api-base">API base URL</label>
+        <input id="api-base" type="url" placeholder="http://localhost:8000" value="">
+        <button class="btn btn-primary" type="submit">Sign in</button>
+      </form>
+      <p class="api-hint">Default password: <code>meditailor</code>. Leave API URL empty to use the same origin.</p>
+    </div>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <div class="topbar">
+      <h1>MediTailor Admin</h1>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" id="btn-refresh" type="button">Refresh</button>
+        <a class="btn btn-ghost" href="index.html">View site</a>
+        <button class="btn btn-ghost" id="btn-logout" type="button">Log out</button>
+      </div>
+    </div>
+    <div class="layout">
+      <div class="stats">
+        <div class="stat"><div class="label">Submissions</div><div class="value" id="stat-count">—</div></div>
+        <div class="stat"><div class="label">Years experience</div><div class="value" id="stat-years">—</div></div>
+        <div class="stat"><div class="label">Hospital clients</div><div class="value" id="stat-clients">—</div></div>
+        <div class="stat"><div class="label">Units / month</div><div class="value" id="stat-units">—</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Contact / quote requests</h2>
+          <span id="last-updated" style="color:var(--muted);font-size:.8rem"></span>
+        </div>
+        <div id="table-wrap"><div class="empty">Loading…</div></div>
+      </div>
+      <p class="api-hint">API must be running (FastAPI). Static hosting alone cannot store submissions.</p>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "meditailor-admin";
+    const loginScreen = document.getElementById("login-screen");
+    const dashboard = document.getElementById("dashboard");
+    const loginError = document.getElementById("login-error");
+
+    function getConfig() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); }
+      catch { return null; }
+    }
+    function setConfig(cfg) { localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg)); }
+    function clearConfig() { localStorage.removeItem(STORAGE_KEY); }
+    function apiBase() {
+      const cfg = getConfig();
+      return ((cfg && cfg.apiBase) || "").replace(/\/$/, "");
+    }
+    function authHeaders() {
+      const cfg = getConfig();
+      return { "Content-Type": "application/json", "X-Admin-Password": cfg ? cfg.password : "" };
+    }
+
+    async function api(path, options = {}) {
+      const res = await fetch(apiBase() + path, {
+        ...options,
+        headers: { ...authHeaders(), ...(options.headers || {}) },
+      });
+      if (res.status === 401) {
+        clearConfig();
+        showLogin("Session expired or wrong password.");
+        throw new Error("unauthorized");
+      }
+      if (!res.ok) throw new Error((await res.text()) || res.statusText);
+      return res.json();
+    }
+
+    function showLogin(msg) {
+      dashboard.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+      if (msg) { loginError.textContent = msg; loginError.classList.remove("hidden"); }
+      else loginError.classList.add("hidden");
+    }
+
+    function showDashboard() {
+      loginScreen.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      loadData();
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    function renderTable(items) {
+      const wrap = document.getElementById("table-wrap");
+      if (!items || !items.length) {
+        wrap.innerHTML = '<div class="empty">No submissions yet.</div>';
+        return;
+      }
+      const rows = items.slice().reverse().map((item) => `
+        <tr>
+          <td><span class="badge">${escapeHtml(item.id || "")}</span></td>
+          <td>${escapeHtml(item.name || "")}</td>
+          <td>${escapeHtml(item.company || "—")}</td>
+          <td><a href="mailto:${escapeHtml(item.email || "")}">${escapeHtml(item.email || "")}</a></td>
+          <td>${escapeHtml(item.phone || "—")}</td>
+          <td>${escapeHtml(item.product || "—")}</td>
+          <td>${escapeHtml(item.language || "—")}</td>
+          <td><div class="msg">${escapeHtml(item.message || "")}</div></td>
+          <td>${escapeHtml((item.received_at || "").replace("T", " ").replace("Z", ""))}</td>
+        </tr>`).join("");
+      wrap.innerHTML = `<div style="overflow-x:auto"><table>
+        <thead><tr><th>ID</th><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Product</th><th>Lang</th><th>Message</th><th>Received</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>`;
+    }
+
+    async function loadData() {
+      try {
+        const [subs, stats] = await Promise.all([
+          api("/api/admin/submissions"),
+          api("/api/admin/stats"),
+        ]);
+        document.getElementById("stat-count").textContent = subs.count ?? (subs.items || []).length;
+        document.getElementById("stat-years").textContent = stats.years_experience ?? "—";
+        document.getElementById("stat-clients").textContent = stats.hospital_clients ?? "—";
+        document.getElementById("stat-units").textContent =
+          stats.units_per_month != null ? Number(stats.units_per_month).toLocaleString() : "—";
+        renderTable(subs.items || []);
+        document.getElementById("last-updated").textContent = "Updated " + new Date().toLocaleString();
+      } catch (e) {
+        if (e.message !== "unauthorized") {
+          document.getElementById("table-wrap").innerHTML =
+            `<div class="empty">Could not load data. Is the API running?<br><small>${escapeHtml(e.message)}</small></div>`;
+        }
+      }
+    }
+
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setConfig({
+        password: document.getElementById("password").value,
+        apiBase: document.getElementById("api-base").value.trim(),
+      });
+      try {
+        await api("/api/admin/submissions");
+        showDashboard();
+      } catch {
+        clearConfig();
+        showLogin("Login failed. Check password and API URL.");
+      }
+    });
+
+    document.getElementById("btn-logout").addEventListener("click", () => { clearConfig(); showLogin(); });
+    document.getElementById("btn-refresh").addEventListener("click", loadData);
+
+    if (location.port === "8000") document.getElementById("api-base").value = location.origin;
+    if (getConfig()) showDashboard();
+  </script>
+</body>
+</html>
