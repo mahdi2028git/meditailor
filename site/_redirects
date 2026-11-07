@@ -1,1 +1,2 @@
-/*    /index.html   200
+# No SPA rewrite needed — single index.html site
+# (/* /index.html 200 caused infinite loop error 100324)
