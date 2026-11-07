@@ -1,3 +1,14 @@
+# MediTailor — static multi-language website
+# Deploy with either:
+#   npx wrangler pages deploy site --project-name=meditailor
+#   npx wrangler deploy
+
 name = "meditailor"
-compatibility_date = "2024-11-01"
-pages_build_output_dir = "site"
+compatibility_date = "2026-11-07"
+
+# For Cloudflare Pages (Git builds / pages deploy)
+pages_build_output_dir = "./site"
+
+# For Workers Static Assets (wrangler deploy)
+[assets]
+directory = "./site"
