@@ -1,6 +1,4 @@
-# Cloudflare Pages — Angular frontend
-# Docs: https://developers.cloudflare.com/pages/
-
-name = "meditailor"
-compatibility_date = "2024-11-01"
-pages_build_output_dir = "dist/meditailor/browser"
+# Do not use for deploy. Root wrangler.toml + site/ is the static deploy path.
+# Angular optional: npm run build then pages deploy dist/meditailor/browser
+name = "meditailor-angular-unused"
+compatibility_date = "2026-11-07"

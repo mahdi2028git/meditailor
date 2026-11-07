@@ -1,3 +1,3 @@
-theme: jekyll-theme-minimal
-title: Octocat's homepage
-description: Bookmark this to keep an eye on my project updates!
+# This is NOT a Jekyll site.
+# Static multi-language HTML lives in /site
+# Cloudflare Pages: build command empty, output directory = site
